@@ -1,0 +1,99 @@
+{
+  "name": "apiman-manager-ui",
+  "version": "1.3.0",
+  "description": "Apiman's UI component, written principally in AngularJS",
+  "main": "dist/apiman-manager.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apiman/apiman.git"
+  },
+  "keywords": [
+    "apiman",
+    "api",
+    "management"
+  ],
+  "author": "apiman Team",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/apiman/apiman/issues"
+  },
+  "homepage": "https://github.com/apiman/apiman#readme",
+  "scripts": {
+    "apiman:rebuild": "./../../../fastbuild.sh",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "ci": "cd ci && bash run-e2e.sh",
+    "test:headless": "yarn cy:run",
+    "watch": "webpack --watch --mode=development",
+    "serve": "webpack serve --open --mode=development"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.10",
+    "jquery": "3.5.1",
+    "@types/jquery": "3.5.1",
+    "@braintree/sanitize-url": "6.0.0"
+  },
+  "dependencies": {
+    "@json-editor/json-editor": "2.7.0",
+    "@toast-ui/editor": "3.1.5",
+    "@toast-ui/editor-plugin-code-syntax-highlight": "3.1.0",
+    "@toast-ui/editor-plugin-color-syntax": "3.1.0",
+    "angular": "1.8.2",
+    "angular-animate": "1.8.2",
+    "angular-clipboard": "1.1.1",
+    "angular-mocks": "1.8.2",
+    "angular-resource": "1.8.2",
+    "angular-route": "1.8.2",
+    "angular-sanitize": "1.8.3",
+    "angular-schema-form": "0.8.12",
+    "angular-scrollable-table": "1.1.2",
+    "angular-ui-bootstrap": "0.14.3",
+    "angular-xeditable-npm": "0.1.9",
+    "buffer": "6.0.3",
+    "cropperjs": "1.5.13",
+    "d3": "3.5.6",
+    "ip-address": "8.1.0",
+    "jquery": "3.5.1",
+    "lodash-es": "4.17.21",
+    "luxon": "2.5.2",
+    "ng-file-upload": "9.1.1",
+    "ng-sortable": "1.2.2",
+    "ngtemplate-loader": "2.1.0",
+    "oclazyload": "1.1.0",
+    "patternfly": "3.59.4",
+    "prismjs": "1.29.0",
+    "process": "0.11.10",
+    "select2": "3.4.5",
+    "swagger-ui": "4.15.5",
+    "typescript": "4.9.4",
+    "ui-select": "0.19.8",
+    "urijs": "1.19.11"
+  },
+  "devDependencies": {
+    "@types/angular": "1.8.3",
+    "@types/jquery": "3.5.1",
+    "@types/lodash": "4.14.191",
+    "@types/luxon": "2.3.2",
+    "@types/swagger-ui": "3.52.0",
+    "@types/urijs": "1.19.17",
+    "@types/webpack-env": "1.16.4",
+    "copy-webpack-plugin": "9.1.0",
+    "css-loader": "6.7.3",
+    "cypress": "10.7.0",
+    "glob": "8.0.1",
+    "html-loader": "3.1.0",
+    "html-webpack-plugin": "5.5.3",
+    "prettier": "2.6.2",
+    "raw-loader": "4.0.2",
+    "style-loader": "3.3.1",
+    "ts-loader": "9.4.2",
+    "wait-on": "6.0.1",
+    "webpack": "5.76.0",
+    "webpack-bundle-analyzer": "4.7.0",
+    "webpack-cli": "5.0.0",
+    "webpack-dev-server": "4.11.0"
+  },
+  "optionalDependencies": {
+    "fsevents": "2.3.2"
+  }
+}

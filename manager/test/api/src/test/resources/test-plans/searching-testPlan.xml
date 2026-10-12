@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testPlan xmlns="urn:io.apiman.test:2014:02:testPlan" name="Search">
+
+  <!-- First, create a bunch of Organizations -->
+  <testGroup name="Populate With Data">
+    <!-- Organizations -->
+    <test name="Create Organization 1">test-plan-data/searching/populate/organizations/001_create.resttest</test>
+    <test name="Create Organization 2">test-plan-data/searching/populate/organizations/002_create.resttest</test>
+    <test name="Create Organization 3">test-plan-data/searching/populate/organizations/003_create.resttest</test>
+    <test name="Create Organization 4">test-plan-data/searching/populate/organizations/004_create.resttest</test>
+    <test name="Create Organization 5">test-plan-data/searching/populate/organizations/005_create.resttest</test>
+    <test name="Create Organization 6">test-plan-data/searching/populate/organizations/006_create.resttest</test>
+    <test name="Create Organization 7">test-plan-data/searching/populate/organizations/007_create.resttest</test>
+    <test name="Create Organization 8">test-plan-data/searching/populate/organizations/008_create.resttest</test>
+    <test name="Create Organization 9">test-plan-data/searching/populate/organizations/009_create.resttest</test>
+    <test name="Create Organization 10">test-plan-data/searching/populate/organizations/010_create.resttest</test>
+    <!-- APIs -->
+    <test name="Create API 1">test-plan-data/searching/populate/apis/001_create.resttest</test>
+    <test name="Create API 2">test-plan-data/searching/populate/apis/002_create.resttest</test>
+    <test name="Create API 3">test-plan-data/searching/populate/apis/003_create.resttest</test>
+    <test name="Create API 4">test-plan-data/searching/populate/apis/004_create.resttest</test>
+    <test name="Create API 5">test-plan-data/searching/populate/apis/005_create.resttest</test>
+    <test name="Create API 6">test-plan-data/searching/populate/apis/006_create.resttest</test>
+    <test name="Create API 7">test-plan-data/searching/populate/apis/007_create.resttest</test>
+    <test name="Create API 8">test-plan-data/searching/populate/apis/008_create.resttest</test>
+    <test name="Create API 9">test-plan-data/searching/populate/apis/009_create.resttest</test>
+    <test name="Create API 10">test-plan-data/searching/populate/apis/010_create.resttest</test>
+  </testGroup>
+
+  <!-- Now, execute a number of queries -->
+  <testGroup name="Test Various Queries">
+    <!-- Organizations -->
+    <test name="Query Organization All">test-plan-data/searching/queries/organizations/001_query-all.resttest</test>
+    <test name="Query Organization First Page">test-plan-data/searching/queries/organizations/002_query-page-1.resttest</test>
+    <test name="Query Organization Second Page">test-plan-data/searching/queries/organizations/003_query-page-2.resttest</test>
+    <test name="Query Organization By ID">test-plan-data/searching/queries/organizations/004_query-by-id.resttest</test>
+    <test name="Query Organization All Descending Order">test-plan-data/searching/queries/organizations/005_query-order-by-desc.resttest</test>
+    <test name="Query Organization By Name">test-plan-data/searching/queries/organizations/006_query-by-name.resttest</test>
+    <test name="Query Organization By Name (Caps)">test-plan-data/searching/queries/organizations/007_query-by-name-caps.resttest</test>
+    <!-- APIs -->
+    <test name="Query Api All">test-plan-data/searching/queries/apis/001_query-all.resttest</test>
+    <test name="Query Api All Descending Order">test-plan-data/searching/queries/apis/002_query-order-by-desc.resttest</test>
+    <!-- temporarily disabled these tests because order comes out different in different DBs -->
+<!--    <test name="Query Api First Page">test-plan-data/searching/queries/apis/003_query-page-1.resttest</test>-->
+<!--    <test name="Query Api Second Page">test-plan-data/searching/queries/apis/004_query-page-2.resttest</test>-->
+    <test name="Query Api By ID Uppercase">test-plan-data/searching/queries/apis/005_query-by-id-upper.resttest</test>
+    <test name="Query Api By ID Lowercase">test-plan-data/searching/queries/apis/006_query-by-id-lower.resttest</test>
+    <test name="Query Api By ID Mixedcase">test-plan-data/searching/queries/apis/007_query-by-id-mixed.resttest</test>
+    <test name="Query Api By ID Special">test-plan-data/searching/queries/apis/008_query-by-id-special.resttest</test>
+    <test name="Query Api By Name Uppercase">test-plan-data/searching/queries/apis/009_query-by-name-upper.resttest</test>
+    <test name="Query Api By Name Lowercase">test-plan-data/searching/queries/apis/010_query-by-name-lower.resttest</test>
+    <test name="Query Api By Name Mixedcase">test-plan-data/searching/queries/apis/011_query-by-name-mixed.resttest</test>
+    <test name="Query Api By Name Special">test-plan-data/searching/queries/apis/012_query-by-name-special.resttest</test>
+    <test name="Query integer field with numeric gt comparison (Issue 2283)">test-plan-data/searching/queries/apis/013_query-integer-field-issue-2283.resttest</test>
+    <!-- Misc -->
+    <test name="Query API Catalogs">test-plan-data/searching/queries/misc/001_query-api-catalog.resttest</test>
+    <test name="List API Catalog Namespaces">test-plan-data/searching/queries/misc/002_query-api-namespaces.resttest</test>
+    <test name="Find Users by Name">test-plan-data/searching/queries/misc/003_query-users.resttest</test>
+  </testGroup>
+
+  <!-- Now, test that request validation is working -->
+  <testGroup name="Test Various Invalid Requests">
+    <test name="Missing Order-By Name">test-plan-data/searching/validation/001_query-invalid-orderby-name.resttest</test>
+    <test name="Invalid Page Size">test-plan-data/searching/validation/002_query-invalid-pageSize.resttest</test>
+    <test name="Invalid Page">test-plan-data/searching/validation/003_query-invalid-page.resttest</test>
+    <test name="Invalid Filter Name">test-plan-data/searching/validation/004_query-invalid-filter-name.resttest</test>
+    <test name="Invalid Filter Value">test-plan-data/searching/validation/005_query-invalid-filter-value.resttest</test>
+    <test name="Invalid Filter Operator">test-plan-data/searching/validation/006_query-invalid-filter-operator.resttest</test>
+  </testGroup>
+
+</testPlan>

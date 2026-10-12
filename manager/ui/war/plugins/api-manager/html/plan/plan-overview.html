@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+
+<body>
+<div>
+
+    <div ng-include="headerInclude"></div>
+    <div ng-controller="Apiman.PlanOverviewController" class="container-pf-nav-pf-vertical container-fluid page"
+         data-field="page" ng-cloak="" ng-show="pageState == 'loaded'">
+        <div ng-include="'plugins/api-manager/html/plan/plan_bc.include'"></div>
+        <!-- Entity Summary Row -->
+        <div ng-include="'plugins/api-manager/html/plan/plan_entity.include'"></div>
+
+        <!-- Navigation + Content Row -->
+        <div class="row">
+            <!-- Left hand nav -->
+            <div ng-include="'plugins/api-manager/html/plan/plan_tabs.include'"></div>
+            <!-- /Left hand nav -->
+
+            <!-- Content -->
+            <div class="col-md-10 apiman-entity-content apiman-entity-overview">
+                <!-- Content Summary -->
+                <div class="col-md-12">
+                    <h1 apiman-i18n-key="plan-details">Plan Details</h1>
+                    <p apiman-i18n-key="plan-overview.plan-description">
+                        Use this page to modify the metadata and policies of a plan. Once you have fully configured the
+                        plan,
+                        don't forget to lock it: Only locked plans can be used by APIs in the organization.
+                    </p>
+
+                    <h2><a href="{{ pluginName }}/orgs/{{ org.id }}/plans/{{ plan.id }}/{{ version.version }}/policies"
+                           apiman-i18n-key="policies">Policies</a></h2>
+                    <p apiman-i18n-key="plan-overview.policies-description">
+                        The <strong>Policies</strong> tab allows you to manage the policies for this plan. These policies will be
+                        applied
+                        whenever a request is made to an API via this plan.
+                    </p>
+
+                    <h2><a href="{{ pluginName }}/orgs/{{ org.id }}/plans/{{ plan.id }}/{{ version.version }}/activity"
+                           apiman-i18n-key="activity">Change Log</a></h2>
+                    <p apiman-i18n-key="plan-overview.activity-description">
+                        The <strong>Change Log</strong> tab shows a history of all the changes made to the plan. Essentially this
+                        is an
+                        audit log.
+                    </p>
+                </div>
+            </div>
+            <!-- /Content -->
+        </div>
+    </div> <!-- /container-pf-nav-pf-vertical container-fluid -->
+</div>
+</body>
+</html>

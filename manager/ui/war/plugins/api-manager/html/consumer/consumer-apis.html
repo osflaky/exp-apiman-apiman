@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+</head>
+
+<body>
+<div>
+
+    <div ng-include="headerInclude"></div>
+    <div class="page container-pf-nav-pf-vertical container-fluid" data-field="page"
+         ng-cloak="" ng-controller="Apiman.ConsumerApisController" ng-show="pageState == 'loaded'">
+        <div class="row">
+            <div class="col-md-12">
+                <ol class="breadcrumb" data-field="breadcrumb">
+                    <li>
+                        <a href="{{ pluginName }}/" id="bc-home">
+                            <i class="fa fa-home fa-fw"></i>
+                            <span apiman-i18n-key="home">Home</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <i class="fa fa-search fa-fw"></i>
+                        <span apiman-i18n-key="apis">APIs</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1 apiman-i18n-key="find-api" class="consumer-top-header">All APIs</h1>
+            </div>
+            <div class="col-md-6 no-phone">
+                <p apiman-i18n-key="find-api-description" class="description">Use the various search options on this
+                    page to
+                    find the APIs, you wish to consume. Then review them and eventually create contracts to them.</p>
+            </div>
+            <div class="col-md-6">
+                <form class="text-right pull-right" ng-submit="searchSvcs(apiName, currentPage, pageSize)">
+                    <input apiman-i18n-key="searchfor-apis" class="apiman-form-control form-control input-search"
+                           id="apiman-search"
+                           ng-model="apiName" placeholder="Search by API name or keyword..."
+                           type="text">
+                    <button apiman-i18n-key="search" class="btn btn-default btn-search" data-field="searchButton"
+                            id="search-btn"
+                            type="submit">Search
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <hr/>
+            </div>
+        </div>
+
+        <!-- Search results -->
+        <div class="row browse-items">
+            <div class="col-md-12">
+
+                <div class="apiman-no-content container-fluid" ng-hide="apis.length > 0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p apiman-i18n-key="consumer-no-apis-found" class="apiman-no-entities-description">No APIs
+                                found. Either no APIs matched the query or you haven't queried yet!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div ng-show="apis.length > 0">
+                        <div class="count col-md-6">
+                            Found {{resultCount}} matching APIs.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 text-right" ng-show="resultCount > 10">
+                        <span apiman-i18n-key="select-page-size">Select page size </span>
+                        <select ng-change="searchSvcs(apiName, currentPage, pageSize)" ng-init="pageSize = '10'"
+                                ng-model="pageSize">
+                            <option ng-selected="true" value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4" ng-repeat="api in apis">
+                        <div class="item">
+                            <div class="title">
+                                <i class="fa fa-puzzle-piece icon"></i>
+                                <a href="{{ pluginName }}/browse/orgs/{{api.organizationId}}">
+                                    {{ api.organizationName }}
+                                </a>
+                                <span apiman-i18n-skip> / </span>
+                                <strong>
+                                    <a href="{{ pluginName }}/browse/orgs/{{api.organizationId}}/{{api.id}}">
+                                        {{ api.name }}
+                                    </a>
+                                </strong>
+                            </div>
+                            <div class="description" title="{{ api.description }}">{{ api.description | limitTo: 60 }}
+                                <span ng-show="api.description.length > 60">...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" ng-show="apis.length > 0 && resultCount > pageSize">
+                <uib-pagination boundary-link-numbers="true" direction-links="true" force-ellipses="true"
+                                items-per-page="pageSize"
+                                max-size="5" ng-change="searchSvcs(apiName, currentPage, pageSize)"
+                                ng-init="currentPage = 1" ng-model="currentPage" rotate="true"
+                                total-items="resultCount"/>
+            </div>
+        </div>
+    </div> <!-- /container-pf-nav-pf-vertical container-fluid -->
+</div>
+</body>
+</html>

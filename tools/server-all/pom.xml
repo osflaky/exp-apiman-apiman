@@ -1,0 +1,181 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.apiman</groupId>
+    <artifactId>apiman-tools</artifactId>
+    <version>3.2.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>apiman-tools-server-all</artifactId>
+  <packaging>pom</packaging>
+  <name>apiman-tools-server-all</name>
+
+  <dependencies>
+    <!-- The WildFly version of APIMan -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>apiman-distro-wildfly</artifactId>
+      <type>zip</type>
+      <classifier>overlay</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.apiman</groupId>
+      <artifactId>apiman-distro-keycloak</artifactId>
+      <type>zip</type>
+      <classifier>overlay</classifier>
+    </dependency>
+
+    <!-- Some Basic Services for Testing -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>apiman-tools-services</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <!-- Data Source Dependencies -->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-docker-compose</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/docker</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources/docker</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- Install on WildFly -->
+    <profile>
+      <id>install-all-wildfly</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-wildfly</id>
+                <phase>install</phase>
+                <configuration>
+                  <tasks>
+                    <antversion property="antversion" />
+                    <echo>Ant Version: ${antversion}</echo>
+
+                    <property name="wildfly.version" value="${version.org.wildfly.as}"/>
+
+                    <property name="appserver.id" value="wildfly" />
+                    <property name="apiman.wildfly.download.url" value="https://download.jboss.org/wildfly/${wildfly.version}/wildfly-${wildfly.version}.zip" />
+                    <property name="apiman.tempdir" value="${project.build.directory}/_tmp" />
+                    <property name="apiman.install.dir" value="${project.build.directory}" />
+                    <property name="apiman.docker.dir" value="${project.build.directory}/docker" />
+                    <property name="apiman.appserver.dir" location="${apiman.install.dir}/wildfly-dev-server" />
+                    <property name="apiman.appserver.zip" location="${basedir}/wildfly-${wildfly.version}.zip" />
+                    <property name="apiman.apiman-distro-wildfly.zip" value="${maven.dependency.io.apiman.apiman-distro-wildfly.overlay.zip.path}" />
+                    <property name="apiman.apiman-distro-keycloak.zip" value="${maven.dependency.io.apiman.apiman-distro-keycloak.overlay.zip.path}" />
+                    <property name="apiman.apiman-tools-services.war" value="${maven.dependency.io.apiman.apiman-tools-services.war.path}" />
+                    <property name="apiman.wildfly.home" location="${apiman.appserver.dir}" />
+                    <property name="apiman.wildfly.webapps" location="${apiman.appserver.dir}/standalone/deployments" />
+                    <property name="apiman.resources.dir" location="${basedir}/src/main/resources" />
+
+                    <echo></echo>
+                    <echo>********************************************************************</echo>
+                    <echo>Apiman Dist: ${apiman.apiman-distro-wildfly.zip}</echo>
+                    <echo>Apiman Dist: ${apiman.apiman-distro-keycloak.zip}</echo>
+                    <echo>Dev Services: ${apiman.apiman-tools-services.war}</echo>
+                    <echo>-------</echo>
+                    <echo>WildFly Home: ${apiman.wildfly.home}</echo>
+                    <echo>********************************************************************</echo>
+                    <echo></echo>
+
+                    <mkdir dir="${apiman.tempdir}" />
+
+                    <!-- Download and unpack WildFly  -->
+                    <get src="${apiman.wildfly.download.url}" dest="${apiman.appserver.zip}" usetimestamp="true" skipexisting="true" />
+                    <unzip src="${apiman.appserver.zip}" dest="${apiman.install.dir}" overwrite="false" />
+
+                    <move file="${apiman.install.dir}/wildfly-${wildfly.version}" tofile="${apiman.appserver.dir}"/>
+
+                    <!-- Overlay Apiman on top of WildFly  -->
+                    <unzip src="${apiman.apiman-distro-wildfly.zip}" dest="${apiman.appserver.dir}" overwrite="true" />
+
+                    <!-- Extract KC distro to make available for docker-compose  -->
+                    <unzip src="${apiman.apiman-distro-keycloak.zip}" dest="${apiman.docker.dir}" overwrite="true" />
+
+                    <!-- Make sure to chmod 755 the shell scripts -->
+                    <chmod perm="a+x" dir="${apiman.appserver.dir}/bin">
+                      <include name="*.sh" />
+                    </chmod>
+
+                    <!-- Deploy additional stuff -->
+                    <copy
+                      file="../../distro/wildfly/src/main/resources/overlay/standalone/configuration/standalone-apiman.xml"
+                      tofile="${apiman.wildfly.home}/standalone/configuration/standalone.xml" overwrite="true" />
+                    <copy file="${apiman.apiman-tools-services.war}" tofile="${apiman.wildfly.webapps}/services.war"
+                      overwrite="true" />
+
+                    <!-- Point Apiman auth to port 8085, where (hopefully) Keycloak is running from Docker -->
+                    <echo file="${apiman.wildfly.home}/bin/standalone.conf" append="true"><![CDATA[
+                      if [[ -z $APIMAN_AUTH_URL ]]; then
+                        export APIMAN_AUTH_URL=http://localhost:8085/
+                      fi
+                      echo "*** Please ensure Keycloak is running and available at $APIMAN_AUTH_URL or set the environment variable APIMAN_AUTH_URL to your Keycloak instance ***"
+                    ]]></echo>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
